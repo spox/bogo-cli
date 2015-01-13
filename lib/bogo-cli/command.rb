@@ -20,10 +20,11 @@ module Bogo
       def initialize(opts, args)
         @options = opts.to_smash
         @arguments = args
-        @ui = Ui.new(
-          opts.fetch(
-            :app_name,
-            self.class.name.split('::').first
+        @ui = opts.fetch(:ui,
+          Ui.new(
+            :app_name => opts.fetch(:app_name,
+              self.class.name.split('::').first
+            )
           )
         )
         load_config!
