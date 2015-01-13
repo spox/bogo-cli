@@ -76,10 +76,15 @@ module Bogo
         begin
           result = yield
           ui.puts ui.color('complete!', :green, :bold)
-          if(result.is_a?(Hash))
+          if(result)
             ui.puts '---> Results:'
-            result.each do |k,v|
-              ui.puts "    #{ui.color("#{k}:", :bold)} #{v}"
+            case result
+            when Hash
+              result.each do |k,v|
+                ui.puts '    ' << ui.color("#{k}: ", :bold) << v
+              end
+            else
+              ui.puts result
             end
           end
         rescue => e
