@@ -1,0 +1,9 @@
+{
+  "test": {
+    "name": "fubar",
+    "port": 80
+  },
+  "command": {
+    "namespaced": true
+  }
+}
