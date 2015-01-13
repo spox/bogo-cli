@@ -20,11 +20,9 @@ module Bogo
       def initialize(opts, args)
         @options = opts.to_smash
         @arguments = args
-        @ui = opts.fetch(:ui,
-          Ui.new(
-            :app_name => opts.fetch(:app_name,
-              self.class.name.split('::').first
-            )
+        @ui = opts.delete(:ui) || Ui.new(
+          :app_name => opts.fetch(:app_name,
+            self.class.name.split('::').first
           )
         )
         load_config!
@@ -61,7 +59,9 @@ module Bogo
           config = Bogo::Config.new(path) if path
         end
         if(config)
-          @options = config.to_smash.deep_merge(options.to_smash)
+          merge_opts = options.to_smash
+          merge_opts.delete(:config)
+          @options = config.to_smash.deep_merge(merge_opts)
         end
         options
       end
