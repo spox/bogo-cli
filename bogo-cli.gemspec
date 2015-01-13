@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'bogo'
   s.add_dependency 'bogo-config'
   s.add_dependency 'bogo-ui'
-  s.add_dependency 'slop'
+  s.add_dependency 'slop', '~> 3'
   s.files = Dir['lib/**/*'] + %w(bogo-cli.gemspec README.md CHANGELOG.md CONTRIBUTING.md LICENSE)
 end
