@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = 'CLI Helper libraries'
   s.require_path = 'lib'
   s.license = 'Apache 2.0'
-  s.add_dependency 'bogo'
+  s.add_dependency 'bogo', '>= 0.1.6'
   s.add_dependency 'bogo-config'
   s.add_dependency 'bogo-ui'
   s.add_dependency 'slop', '~> 3'

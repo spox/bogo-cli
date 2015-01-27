@@ -18,7 +18,7 @@ module Bogo
       #
       # @return [self]
       def initialize(opts, args)
-        @options = opts.to_smash
+        @options = opts.to_smash(:snake)
         @arguments = args
         @ui = opts.delete(:ui) || Ui.new(
           :app_name => opts.fetch(:app_name,
