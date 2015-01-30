@@ -18,8 +18,10 @@ module Bogo
           rescue => e
             if(ENV['DEBUG'])
               $stderr.puts "ERROR: #{e.class}: #{e}\n#{e.backtrace.join("\n")}"
+            else
+              $stderr.puts "ERROR: #{e.class}: #{e}"
             end
-            exit -1
+            exit e.respond_to?(:exit_code) ? e.exit_code : -1
           end
           true
         end
