@@ -18,10 +18,10 @@ module Bogo
       #
       # @return [self]
       def initialize(opts, args)
-        @options = opts.to_smash(:snake)
+        @options = opts.to_hash.to_smash(:snake)
         @arguments = args
-        @ui = opts.delete(:ui) || Ui.new(
-          :app_name => opts.fetch(:app_name,
+        @ui = options.delete(:ui) || Ui.new(
+          :app_name => options.fetch(:app_name,
             self.class.name.split('::').first
           )
         )
