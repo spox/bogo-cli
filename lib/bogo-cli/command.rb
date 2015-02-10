@@ -59,7 +59,7 @@ module Bogo
           config = Bogo::Config.new(path) if path
         end
         if(config)
-          merge_opts = options.to_smash
+          merge_opts = Smash[options.to_smash.map{|k,v| [k,v] unless v.nil?}.compact]
           merge_opts.delete(:config)
           @options = config.to_smash.deep_merge(merge_opts)
         end
