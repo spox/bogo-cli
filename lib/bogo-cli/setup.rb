@@ -15,7 +15,7 @@ module Bogo
             Slop.parse(:help => true) do
               instance_exec(&block)
             end
-          rescue => e
+          rescue StandardError, ScriptError => e
             if(ENV['DEBUG'])
               $stderr.puts "ERROR: #{e.class}: #{e}\n#{e.backtrace.join("\n")}"
             else
