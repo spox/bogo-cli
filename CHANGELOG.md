@@ -1,3 +1,8 @@
+## v0.1.6
+* Remove options when value is nil (fixes merging issues)
+* Proxy options to Ui instance when building
+* Rescue ScriptError explicitly as it's not within StandardError
+
 ## v0.1.4
 * Force passed options to Hash type and covert to Smash
 * Force passed options keys to snake case
