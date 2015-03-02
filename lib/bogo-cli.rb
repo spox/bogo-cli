@@ -1,5 +1,5 @@
 require 'bogo'
-require 'bogo-cli/version'
+require 'bogo-config'
 
 module Bogo
   module Cli
@@ -7,3 +7,5 @@ module Bogo
     autoload :Setup, 'bogo-cli/setup'
   end
 end
+
+require 'bogo-cli/version'
