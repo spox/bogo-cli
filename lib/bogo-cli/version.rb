@@ -1,5 +1,6 @@
 module Bogo
   module Cli
-    VERSION = Gem::Version.new('0.1.7')
+    # Current library version
+    VERSION = Gem::Version.new('0.1.8')
   end
 end

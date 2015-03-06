@@ -1,3 +1,6 @@
+## v0.1.8
+* Always load bogo-config
+
 ## v0.1.6
 * Remove options when value is nil (fixes merging issues)
 * Proxy options to Ui instance when building
