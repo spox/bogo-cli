@@ -17,14 +17,14 @@ module Bogo
       # Build new command instance
       #
       # @return [self]
-      def initialize(opts, args)
-        @options = opts.to_hash.to_smash(:snake)
+      def initialize(cli_opts, args)
+        @options = cli_opts.to_hash.to_smash(:snake)
         @arguments = args
         ui_args = Smash.new(
           :app_name => options.fetch(:app_name,
             self.class.name.split('::').first
           )
-        ).merge(@options)
+        ).merge(opts)
         @ui = options.delete(:ui) || Ui.new(ui_args)
         load_config!
       end
