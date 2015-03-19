@@ -1,3 +1,6 @@
+## v0.1.10
+* Pass namespaced configuration through to UI
+
 ## v0.1.8
 * Always load bogo-config
 
