@@ -26,7 +26,7 @@ module Bogo
           :app_name => options.fetch(:app_name,
             self.class.name.split('::').first
           )
-        ).merge(opts)
+        ).merge(config.to_smash)
         @ui = options.delete(:ui) || Ui.new(ui_args)
         load_config!
       end
@@ -45,16 +45,14 @@ module Bogo
       #
       # @return [Smash]
       def config
-        memoize(:config) do
-          options.to_smash.deep_merge(opts.to_smash)
-        end
+        options.to_smash.deep_merge(opts.to_smash)
       end
 
       # Command specific options
       #
       # @return [Hash]
       def opts
-        options.fetch(self.class.name.split('::').last.downcase, {})
+        options.fetch(Bogo::Utility.snake(self.class.name.split('::').last), {})
       end
 
       # Load configuration file and merge opts
