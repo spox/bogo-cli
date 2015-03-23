@@ -1,3 +1,6 @@
+## v0.1.12
+* Add `Bogo::Cli#config` method that merges `#options` with `#opts`
+
 ## v0.1.10
 * Pass namespaced configuration through to UI
 
