@@ -25,7 +25,13 @@ describe Bogo::Cli::Command do
     end
 
     it 'should have class namespaced configuration available via #opts' do
-      @command.send(:opts).must_equal Smash.new(:namespaced => true)
+      @command.send(:opts).must_equal Smash.new(:namespaced => true, :override => 'yes')
+    end
+
+    it 'should have options merged with namespaced configuration via #config' do
+      @command.send(:options)[:override].must_equal 'no'
+      @command.send(:config)[:override].must_equal 'yes'
+      @command.send(:config)[:item].must_equal 'thing'
     end
 
     it 'should have an abstract #execute! method for subclassing' do
