@@ -7,6 +7,8 @@ module Bogo
     # Abstract command class
     class Command
 
+      include Bogo::Memoization
+
       # @return [Hash] options
       attr_reader :options
       # @return [Array] cli arguments
@@ -37,6 +39,16 @@ module Bogo
       end
 
       protected
+
+      # Provides top level options with command specific options
+      # merged to provide custom overrides
+      #
+      # @return [Smash]
+      def config
+        memoize(:config) do
+          options.to_smash.deep_merge(opts.to_smash)
+        end
+      end
 
       # Command specific options
       #
