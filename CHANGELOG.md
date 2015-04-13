@@ -1,3 +1,6 @@
+## v0.1.14
+* Merge namespaced opts with globals when providing options to allow full config load
+
 ## v0.1.12
 * Add `Bogo::Cli#config` method that merges `#options` with `#opts`
 
