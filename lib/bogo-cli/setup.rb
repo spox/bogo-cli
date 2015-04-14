@@ -3,6 +3,16 @@ Signal.trap('INT'){ exit -1 }
 require 'slop'
 require 'bogo-cli'
 
+class Slop
+  def bogo_cli_run(*args, &block)
+    slop_run(*args, &block)
+    old_runner = @runner
+    @runner = proc{|*args| old_runner.call(*args); exit 0}
+  end
+  alias_method :slop_run, :run
+  alias_method :run, :bogo_cli_run
+end
+
 module Bogo
   module Cli
     class Setup
@@ -14,9 +24,11 @@ module Bogo
         # @return [TrueClass]
         def define(&block)
           begin
-            Slop.parse(:help => true) do
+            slop_result = Slop.parse(:help => true) do
               instance_exec(&block)
             end
+            puts slop_result.help
+            exit -1
           rescue StandardError, ScriptError => e
             if(ENV['DEBUG'])
               $stderr.puts "ERROR: #{e.class}: #{e}\n#{e.backtrace.join("\n")}"
