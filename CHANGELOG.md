@@ -1,3 +1,9 @@
+## v0.1.16
+* Output exception message when reporting error to get full content
+* Trap INT to allow nicer user forced exits
+* Automatically exit after command block is run
+* Print help message and exit non-zero when no command is run
+
 ## v0.1.14
 * Merge namespaced opts with globals when providing options to allow full config load
 
