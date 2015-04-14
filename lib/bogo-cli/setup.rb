@@ -1,3 +1,5 @@
+Signal.trap('INT'){ exit -1 }
+
 require 'slop'
 require 'bogo-cli'
 
