@@ -1,3 +1,6 @@
+## v0.1.18
+* Remove nil value items from namespaced options hash prior to merge
+
 ## v0.1.16
 * Output exception message when reporting error to get full content
 * Trap INT to allow nicer user forced exits
