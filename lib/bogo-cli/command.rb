@@ -50,9 +50,20 @@ module Bogo
 
       # Command specific options
       #
-      # @return [Hash]
+      # @return [Smash]
       def opts
-        options.fetch(Bogo::Utility.snake(self.class.name.split('::').last), {})
+        Smash[
+          options.fetch(
+            Bogo::Utility.snake(
+              self.class.name.split('::').last
+            ),
+            Hash.new
+          ).map{|k,v|
+            unless(v.nil?)
+              [k,v]
+            end
+          }.compact
+        ]
       end
 
       # Load configuration file and merge opts
