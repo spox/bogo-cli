@@ -26,7 +26,7 @@ module Bogo
           :app_name => options.fetch(:app_name,
             self.class.name.split('::').first
           )
-        ).merge(cli_opts.to_smash).merge(opts)
+        ).merge(cli_opts.to_hash.to_smash).merge(opts)
         @ui = options.delete(:ui) || Ui.new(ui_args)
         load_config!
       end
