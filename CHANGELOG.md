@@ -1,3 +1,6 @@
+## v0.1.20
+* Bug fix on command initialization when options provided are Hash-like
+
 ## v0.1.18
 * Remove nil value items from namespaced options hash prior to merge
 
