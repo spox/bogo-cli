@@ -1,3 +1,7 @@
+## v0.1.22
+* Add `Bogo::Cli#config_class` to specify custom `Bogo::Config`
+* Always load provided args through config
+
 ## v0.1.20
 * Bug fix on command initialization when options provided are Hash-like
 
