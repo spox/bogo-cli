@@ -21,6 +21,7 @@ module Bogo
       # @return [self]
       def initialize(cli_opts, args)
         @options = cli_opts.to_hash.to_smash(:snake)
+        @options.delete_if{|k,v| v.nil?}
         @arguments = args
         ui_args = Smash.new(
           :app_name => options.fetch(:app_name,
@@ -72,20 +73,27 @@ module Bogo
       # @return [Hash]
       def load_config!
         if(options[:config])
-          config = Bogo::Config.new(options[:config])
+          config_inst = config_class.new(options[:config])
         elsif(self.class.const_defined?(:DEFAULT_CONFIGURATION_FILES))
           path = self.class.const_get(:DEFAULT_CONFIGURATION_FILES).detect do |check|
             full_check = File.expand_path(check)
             File.exists?(full_check)
           end
-          config = Bogo::Config.new(path) if path
+          config_inst = config_class.new(path) if path
         end
-        if(config)
+        new_opts = config_class.new(options)
+        @options = new_opts.to_smash
+        if(config_inst)
           merge_opts = Smash[options.to_smash.map{|k,v| [k,v] unless v.nil?}.compact]
           merge_opts.delete(:config)
-          @options = config.to_smash.deep_merge(merge_opts)
+          @options = config_inst.to_smash.deep_merge(merge_opts)
         end
         options
+      end
+
+      # @return [Class] config class
+      def config_class
+        Bogo::Config
       end
 
       # Wrap action within nice text. Output resulting Hash if provided
