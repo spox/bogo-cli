@@ -1,3 +1,6 @@
+## v0.1.24
+* [fix] Remove configuration items with `nil` values
+
 ## v0.1.22
 * Add `Bogo::Cli#config_class` to specify custom `Bogo::Config`
 * Always load provided args through config
