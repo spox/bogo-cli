@@ -21,7 +21,10 @@ module Bogo
       # @return [self]
       def initialize(cli_opts, args)
         @options = cli_opts.to_hash.to_smash(:snake)
-        @options.delete_if{|k,v| v.nil?}
+        [@options, *@options.values].compact.each do |hsh|
+          next unless hsh.is_a?(Hash)
+          hsh.delete_if{|k,v| v.nil?}
+        end
         @arguments = args
         ui_args = Smash.new(
           :app_name => options.fetch(:app_name,

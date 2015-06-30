@@ -2,12 +2,12 @@
   "test": {
     "name": "fubar",
     "port": 80
-
   },
   "item": "thing",
   "override": "no",
   "command": {
     "namespaced": true,
-    "override": "yes"
+    "override": "yes",
+    "null_value": "set"
   }
 }
