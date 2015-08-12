@@ -11,6 +11,8 @@ module Bogo
 
       # @return [Hash] options
       attr_reader :options
+      # @return [Hash] default options
+      attr_reader :defaults
       # @return [Array] cli arguments
       attr_reader :arguments
       # @return [Ui]
@@ -20,10 +22,15 @@ module Bogo
       #
       # @return [self]
       def initialize(cli_opts, args)
-        @options = cli_opts.to_hash.to_smash(:snake)
-        [@options, *@options.values].compact.each do |hsh|
-          next unless hsh.is_a?(Hash)
-          hsh.delete_if{|k,v| v.nil?}
+        if(cli_opts.is_a?(Slop))
+          process_cli_options(cli_opts)
+        else
+          @defaults = Smash.new
+          @options = cli_opts.to_hash.to_smash(:snake)
+          [@options, *@options.values].compact.each do |hsh|
+            next unless hsh.is_a?(Hash)
+            hsh.delete_if{|k,v| v.nil?}
+          end
         end
         @arguments = args
         ui_args = Smash.new(
@@ -84,12 +91,21 @@ module Bogo
           end
           config_inst = config_class.new(path) if path
         end
-        new_opts = config_class.new(options)
-        @options = new_opts.to_smash
         if(config_inst)
-          merge_opts = Smash[options.to_smash.map{|k,v| [k,v] unless v.nil?}.compact]
-          merge_opts.delete(:config)
-          @options = config_inst.to_smash.deep_merge(merge_opts)
+          options.delete(:config)
+          @options = config_class.new(
+            defaults.to_smash.deep_merge(
+              config_inst.to_smash.deep_merge(
+                options.to_smash
+              )
+            )
+          ).to_smash
+        else
+          @options = config_class.new(
+            default.to_smash.deep_merge(
+              options.to_smash
+            )
+          ).to_smash
         end
         options
       end
@@ -127,6 +143,30 @@ module Bogo
           raise
         end
         true
+      end
+
+      # Process the given CLI options and isolate default values from
+      # user provided values
+      #
+      # @param cli_opts [Slop]
+      # @return [NilClass]
+      def process_cli_options(cli_opts)
+        unless(cli_opts.is_a?(Slop))
+          raise TypeError.new "Expecting type `Slop` but received type `#{cli_opts.class}`"
+        end
+        @options = Smash.new
+        @defaults = Smash.new
+        cli_opts.each do |cli_opt|
+          unless(cli_opt.value.nil?)
+            opt_key = Bogo::Utility.snake(cli_opt.key)
+            if(cli_opt.default?)
+              @defaults[opt_key] = cli_opt.value
+            else
+              @options[opt_key] = cli_opt.value
+            end
+          end
+        end
+        nil
       end
 
     end
