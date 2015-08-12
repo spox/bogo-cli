@@ -11,6 +11,11 @@ class Slop
   end
   alias_method :slop_run, :run
   alias_method :run, :bogo_cli_run
+  class Option
+    def default?
+      @value.nil?
+    end
+  end
 end
 
 module Bogo
