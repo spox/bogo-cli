@@ -1,3 +1,7 @@
+## v0.1.26
+* Properly merge user provided options on top of defaults
+* Add helper method for determining if option is set as default
+
 ## v0.1.24
 * [fix] Remove configuration items with `nil` values
 
