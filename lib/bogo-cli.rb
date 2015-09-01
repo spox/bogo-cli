@@ -1,4 +1,5 @@
 require 'bogo'
+require 'slop'
 require 'bogo-config'
 
 module Bogo
