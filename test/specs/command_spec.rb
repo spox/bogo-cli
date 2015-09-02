@@ -74,6 +74,27 @@ describe Bogo::Cli::Command do
       end
 
     end
+
+    describe 'CLI option merging' do
+
+      before do
+        @cli = Slop.parse do
+          on :n, :null_value=, 'Option', :default => 'ohai'
+          on :c, :config=, 'Option'
+        end
+      end
+
+      it 'should provide the default option value' do
+        Bogo::Cli::Command.new(@cli, []).send(:config)[:null_value].must_equal 'ohai'
+      end
+
+      it 'should override the default value' do
+        @cli.fetch_option(:c).value = File.join(File.dirname(__FILE__), 'config', 'test.json')
+        Bogo::Cli::Command.new(@cli, []).send(:config)[:null_value].must_equal 'set'
+      end
+
+    end
+
   end
 
 end

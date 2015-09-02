@@ -102,7 +102,7 @@ module Bogo
           ).to_smash
         else
           @options = config_class.new(
-            default.to_smash.deep_merge(
+            defaults.to_smash.deep_merge(
               options.to_smash
             )
           ).to_smash
