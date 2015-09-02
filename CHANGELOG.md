@@ -1,3 +1,7 @@
+## v0.1.28
+* [hotfix] Resolve default option merging
+* Include spec coverage for missed code path
+
 ## v0.1.26
 * Properly merge user provided options on top of defaults
 * Add helper method for determining if option is set as default
