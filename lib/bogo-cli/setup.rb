@@ -1,4 +1,6 @@
-Signal.trap('INT'){ exit -1 }
+# Trigger shutdown on INT or TERM signals
+Signal.trap('INT'){ exit 0 }
+Signal.trap('TERM'){ exit 0 }
 
 require 'bogo-cli'
 
