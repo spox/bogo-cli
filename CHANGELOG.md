@@ -1,3 +1,6 @@
+## v0.1.30
+* Trap and shutdown on TERM signal (mimic INT behavior)
+
 ## v0.1.28
 * [hotfix] Resolve default option merging
 * Include spec coverage for missed code path
