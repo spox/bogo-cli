@@ -1,6 +1,15 @@
 # Trigger shutdown on INT or TERM signals
-Signal.trap('INT'){ exit 0 }
-Signal.trap('TERM'){ exit 0 }
+o_int = Signal.trap('INT'){
+  o_int.call if o_int.respond_to?(:call)
+  Thread.main.raise SignalException.new('SIGINT')
+  exit 0 unless Bogo::Cli.exit_on_signal == false
+}
+
+o_term = Signal.trap('TERM'){
+  o_int.call if o_int.respond_to?(:call)
+  Thread.main.raise SignalException.new('SIGTERM')
+  exit 0 unless Bogo::Cli.exit_on_signal == false
+}
 
 require 'bogo-cli'
 
