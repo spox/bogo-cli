@@ -1,3 +1,7 @@
+## v0.1.32
+* Run previous registered trap if provided
+* Allow clean exit or exception raise in main thread on signal
+
 ## v0.1.30
 * Trap and shutdown on TERM signal (mimic INT behavior)
 
