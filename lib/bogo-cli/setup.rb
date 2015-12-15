@@ -51,10 +51,11 @@ module Bogo
             puts slop_result.help
             exit -1
           rescue StandardError, ScriptError => e
+            prefix = "ERROR: #{e.class}: #{e.message}"
             if(ENV['DEBUG'])
-              $stderr.puts "ERROR: #{e.class}: #{e}\n#{e.backtrace.join("\n")}"
+              $stderr.puts "#{prefix}\n#{e.backtrace.join("\n")}"
             else
-              $stderr.puts "ERROR: #{e.class}: #{e.message}"
+              $stderr.puts "#{prefix}\n#{e.backtrace.first}\n(run with DEBUG=1 for more backtrace)"
             end
             exit e.respond_to?(:exit_code) ? e.exit_code : -1
           end
