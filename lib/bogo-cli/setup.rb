@@ -52,7 +52,7 @@ module Bogo
             exit -1
           rescue StandardError, ScriptError => e
             if(ENV['DEBUG'])
-              $stderr.puts "ERROR: #{e.class}: #{e}\n#{e.backtrace.join("\n")}"
+              $stderr.puts "ERROR: #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
             else
               $stderr.puts "ERROR: #{e.class}: #{e.message}"
             end
