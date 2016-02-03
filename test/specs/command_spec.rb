@@ -95,6 +95,35 @@ describe Bogo::Cli::Command do
 
     end
 
+    describe 'CLI argument processing' do
+
+      it 'should accept list of acceptable strings' do
+        Bogo::Cli::Command.new({}, ['arg1', 'arg2']).wont_be_nil
+      end
+
+      it 'should error when provided flag in argument list' do
+        ->{ Bogo::Cli::Command.new({}, ['arg1', '-x', 'arg2']) }.must_raise ArgumentError
+      end
+
+      it 'should error when provided flag in argument list before double dash' do
+        ->{ Bogo::Cli::Command.new({}, ['arg1', '-x', '--', 'arg2']) }.must_raise ArgumentError
+      end
+
+      it 'should allow flag in argument list if after double dash' do
+        Bogo::Cli::Command.new({}, ['arg1', '--', '-x', 'arg2']).wont_be_nil
+      end
+
+      it 'should include bad argument value within exception message' do
+        exception = nil
+        begin
+          Bogo::Cli::Command.new({}, ['arg1', '-x', 'arg2'])
+        rescue => exception
+        end
+        exception.message.must_include '-x'
+      end
+
+    end
+
   end
 
 end
