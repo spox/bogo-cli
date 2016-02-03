@@ -32,7 +32,7 @@ module Bogo
             hsh.delete_if{|k,v| v.nil?}
           end
         end
-        @arguments = args
+        @arguments = validate_arguments!(args)
         ui_args = Smash.new(
           :app_name => options.fetch(:app_name,
             self.class.name.split('::').first
@@ -167,6 +167,25 @@ module Bogo
           end
         end
         nil
+      end
+
+      # Check for flags within argument list
+      #
+      # @param list [Array<String>]
+      # @return [Array<String>]
+      def validate_arguments!(list)
+        chk_idx = list.find_index do |item|
+          item.start_with?('-')
+        end
+        if(chk_idx)
+          marker = list.find_index do |item|
+            item == '--'
+          end
+          if(marker.nil? || chk_idx.to_i < marker)
+            raise ArgumentError.new "Unknown CLI option provided `#{list[chk_idx]}`"
+          end
+        end
+        list
       end
 
     end
