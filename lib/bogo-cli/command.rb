@@ -93,10 +93,12 @@ module Bogo
         end
         if(config_inst)
           options.delete(:config)
+          defaults_inst = config_class.new(defaults.to_smash)
+          options_inst = config_class.new(options.to_smash)
           @options = config_class.new(
-            defaults.to_smash.deep_merge(
+            defaults_inst.to_smash.deep_merge(
               config_inst.to_smash.deep_merge(
-                options.to_smash
+                options_inst.to_smash
               )
             )
           ).to_smash
