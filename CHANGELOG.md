@@ -1,3 +1,6 @@
+# v0.2.2
+* Process CLI values prior to configuration merge (#7)
+
 # v0.2.0
 * Include full exception message when debug mode enabled
 * Process arguments and check for flags within list
