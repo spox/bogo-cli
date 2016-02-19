@@ -93,6 +93,29 @@ describe Bogo::Cli::Command do
         Bogo::Cli::Command.new(@cli, []).send(:config)[:null_value].must_equal 'set'
       end
 
+      it 'should deep merge hash values' do
+        command_class = Class.new(Bogo::Cli::Command)
+        command_class.class_eval do
+          def self.name
+            'MyCommand'
+          end
+          def config_class
+            spec_config_class = Class.new(Bogo::Config)
+            spec_config_class.class_eval do
+              attribute :test, Hash, :coerce => lambda{|x| Hash[*x.split(':')] }
+            end
+            spec_config_class
+          end
+        end
+        command = command_class.new({
+          :test => 'new:item',
+          :config => File.join(File.dirname(__FILE__), 'config', 'test.json')
+        }, {})
+        config = command.send(:config)
+        config[:test][:new].must_equal 'item'
+        config[:test][:name].must_equal 'fubar'
+      end
+
     end
 
     describe 'CLI argument processing' do
