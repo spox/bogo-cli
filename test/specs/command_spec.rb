@@ -81,6 +81,7 @@ describe Bogo::Cli::Command do
         @cli = Slop.parse do
           on :n, :null_value=, 'Option', :default => 'ohai'
           on :c, :config=, 'Option'
+          on :z, :cli_defaulter=, 'Option', :default => 'CLI DEFAULT'
         end
       end
 
@@ -144,6 +145,33 @@ describe Bogo::Cli::Command do
         }, [])
         config = command.send(:config)
         config[:item].must_equal 'CUSTOM'
+      end
+
+      it 'should use CLI default over configuration default' do
+        command_class = Class.new(Bogo::Cli::Command)
+        command_class.class_eval do
+          def self.name
+            'MyCommand'
+          end
+          def config_class
+            spec_config_class = Class.new(Bogo::Config)
+            spec_config_class.class_eval do
+              attribute :cli_defaulter, String, :default => 'CONFIG DEFAULT'
+            end
+            spec_config_class
+          end
+        end
+        command = command_class.new(@cli, [])
+        config = command.send(:config)
+        config[:cli_defaulter].must_equal 'CLI DEFAULT'
+        @cli.fetch_option(:c).value = File.join(File.dirname(__FILE__), 'config', 'test.json')
+        command = command_class.new(@cli, [])
+        config = command.send(:config)
+        config[:cli_defaulter].must_equal 'CLI DEFAULT'
+        @cli.fetch_option(:z).value = 'CUSTOM'
+        command = command_class.new(@cli, [])
+        config = command.send(:config)
+        config[:cli_defaulter].must_equal 'CUSTOM'
       end
 
     end
