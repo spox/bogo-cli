@@ -1,3 +1,7 @@
+# v0.2.4
+* Prevent defaults from overwriting configuration file values (#8)
+* Ensure CLI defaults have precedence over configuration class defaults (#8)
+
 # v0.2.2
 * Process CLI values prior to configuration merge (#7)
 
