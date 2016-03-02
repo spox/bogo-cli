@@ -116,6 +116,36 @@ describe Bogo::Cli::Command do
         config[:test][:name].must_equal 'fubar'
       end
 
+      it 'should not clobber configuration file values' do
+        command_class = Class.new(Bogo::Cli::Command)
+        command_class.class_eval do
+          def self.name
+            'MyCommand'
+          end
+          def config_class
+            spec_config_class = Class.new(Bogo::Config)
+            spec_config_class.class_eval do
+              attribute :item, String, :default => 'DEFAULT'
+            end
+            spec_config_class
+          end
+        end
+        command = command_class.new({}, [])
+        config = command.send(:config)
+        config[:item].must_equal 'DEFAULT'
+        command = command_class.new({
+          :config => File.join(File.dirname(__FILE__), 'config', 'test.json')
+        }, [])
+        config = command.send(:config)
+        config[:item].must_equal 'thing'
+        command = command_class.new({
+          :item => 'CUSTOM',
+          :config => File.join(File.dirname(__FILE__), 'config', 'test.json')
+        }, [])
+        config = command.send(:config)
+        config[:item].must_equal 'CUSTOM'
+      end
+
     end
 
     describe 'CLI argument processing' do
