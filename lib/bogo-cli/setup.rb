@@ -50,6 +50,12 @@ module Bogo
             end
             puts slop_result.help
             exit -1
+          rescue Bogo::Config::FileLoadError => e
+            $stderr.puts "ERROR: #{[e, e.original].compact.join(' - ')}"
+            if(ENV['DEBUG'])
+              $stderr.puts "Stacktrace: #{e.original.class}: #{e.original.message}\n#{e.original.backtrace.join("\n")}"
+            end
+            exit e.respond_to?(:exit_code) ? e.exit_code : -1
           rescue StandardError, ScriptError => e
             if(ENV['DEBUG'])
               $stderr.puts "ERROR: #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"

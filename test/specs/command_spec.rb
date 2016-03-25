@@ -1,5 +1,6 @@
+require_relative '../spec'
+
 require 'stringio'
-require 'minitest/autorun'
 
 describe Bogo::Cli::Command do
 
@@ -201,6 +202,21 @@ describe Bogo::Cli::Command do
         rescue => exception
         end
         exception.message.must_include '-x'
+      end
+
+    end
+
+    describe 'Configuration file loading' do
+
+      it 'should load configuration file without error' do
+        cmd = Bogo::Cli::Command.new({:config => File.join(File.dirname(__FILE__), 'config', 'test.json')}, [])
+        cmd.must_be_kind_of Bogo::Cli::Command
+      end
+
+      it 'should produce custom error when loading fails' do
+        ->{
+          Bogo::Cli::Command.new({:config => File.join(File.dirname(__FILE__), 'config', 'fail.json')}, [])
+        }.must_raise Bogo::Config::FileLoadError
       end
 
     end
