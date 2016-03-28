@@ -10,9 +10,11 @@ Gem::Specification.new do |s|
   s.description = 'CLI Helper libraries'
   s.require_path = 'lib'
   s.license = 'Apache 2.0'
-  s.add_dependency 'bogo', '>= 0.1.6'
-  s.add_dependency 'bogo-config'
-  s.add_dependency 'bogo-ui'
-  s.add_dependency 'slop', '~> 3'
+  s.add_runtime_dependency 'bogo', '>= 0.1.6', '< 0.6'
+  s.add_runtime_dependency 'bogo-config', '>= 0.1.15', '< 0.5'
+  s.add_runtime_dependency 'bogo-ui'
+  s.add_runtime_dependency 'slop', '~> 3'
+  s.add_development_dependency 'rake', '~> 10'
+  s.add_development_dependency 'minitest'
   s.files = Dir['lib/**/*'] + %w(bogo-cli.gemspec README.md CHANGELOG.md CONTRIBUTING.md LICENSE)
 end
