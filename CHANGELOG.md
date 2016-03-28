@@ -1,3 +1,6 @@
+# v0.2.6
+* Customize error output on configuration file load error (#9)
+
 # v0.2.4
 * Prevent defaults from overwriting configuration file values (#8)
 * Ensure CLI defaults have precedence over configuration class defaults (#8)
