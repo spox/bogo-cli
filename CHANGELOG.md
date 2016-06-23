@@ -1,3 +1,6 @@
+# v0.2.8
+* Load configuration file prior to UI init
+
 # v0.2.6
 * Customize error output on configuration file load error (#9)
 
