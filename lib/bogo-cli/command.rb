@@ -33,13 +33,13 @@ module Bogo
           end
         end
         @arguments = validate_arguments!(args)
+        load_config!
         ui_args = Smash.new(
           :app_name => options.fetch(:app_name,
             self.class.name.split('::').first
           )
-        ).merge(cli_opts.to_hash.to_smash).merge(opts)
+        ).merge(options)
         @ui = options.delete(:ui) || Ui.new(ui_args)
-        load_config!
       end
 
       # Execute the command
