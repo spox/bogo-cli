@@ -1,3 +1,6 @@
+# v0.2.10
+* Prevent re-evaluation of configuration files (spox/bogo-config#6)
+
 # v0.2.8
 * Load configuration file prior to UI init
 
