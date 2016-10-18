@@ -83,13 +83,13 @@ module Bogo
       # @return [Hash]
       def load_config!
         if(options[:config])
-          config_inst = config_class.new(options[:config])
+          config_inst = Config.new(options[:config])
         elsif(self.class.const_defined?(:DEFAULT_CONFIGURATION_FILES))
           path = self.class.const_get(:DEFAULT_CONFIGURATION_FILES).detect do |check|
             full_check = File.expand_path(check)
             File.exists?(full_check)
           end
-          config_inst = config_class.new(path) if path
+          config_inst = Config.new(path) if path
         end
         if(config_inst)
           options.delete(:config)
@@ -100,7 +100,7 @@ module Bogo
               defaults.key?(key)
             end
           ]
-          config_data = config_inst.load!
+          config_data = config_inst.data
           config_inst = Smash[
             config_inst.to_smash.find_all do |key, value|
               config_data.key?(key)
