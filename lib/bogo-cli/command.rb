@@ -38,7 +38,7 @@ module Bogo
           :app_name => options.fetch(:app_name,
             self.class.name.split('::').first
           )
-        ).merge(options)
+        ).merge(opts)
         @ui = options.delete(:ui) || Ui.new(ui_args)
       end
 
