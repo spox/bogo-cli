@@ -1,3 +1,6 @@
+# v0.2.12
+* Merge command config to toplevel for UI options
+
 # v0.2.10
 * Prevent re-evaluation of configuration files (spox/bogo-config#6)
 
