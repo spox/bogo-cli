@@ -1,3 +1,6 @@
+# v0.2.14
+* Prevent unexpected exception when no original is wrapped (#11)
+
 # v0.2.12
 * Merge command config to toplevel for UI options
 
