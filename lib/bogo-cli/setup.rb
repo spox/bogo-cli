@@ -52,7 +52,7 @@ module Bogo
             exit -1
           rescue Bogo::Config::FileLoadError => e
             $stderr.puts "ERROR: #{[e, e.original].compact.join(' - ')}"
-            if(ENV['DEBUG'])
+            if(ENV['DEBUG'] && e.original)
               $stderr.puts "Stacktrace: #{e.original.class}: #{e.original.message}\n#{e.original.backtrace.join("\n")}"
             end
             exit e.respond_to?(:exit_code) ? e.exit_code : -1
