@@ -1,3 +1,7 @@
+# v0.2.16
+* Provide default UI instance and use for error output
+* Automatically configure logger on command setup
+
 # v0.2.14
 * Prevent unexpected exception when no original is wrapped (#11)
 
