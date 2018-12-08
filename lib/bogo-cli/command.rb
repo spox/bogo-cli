@@ -10,7 +10,7 @@ module Bogo
       #
       # @param u [Bogo::Ui]
       # @return [Bogo::Ui]
-      def self.ui(u=nil)
+      def self.ui(u = nil)
         @ui = u if u
         @ui
       end
@@ -48,6 +48,7 @@ module Bogo
         ).merge(config)
         @ui = options.delete(:ui) || Ui.new(ui_args)
         Bogo::Cli::Command.ui(ui)
+        configure_logger!
       end
 
       # Execute the command
@@ -58,6 +59,16 @@ module Bogo
       end
 
       protected
+
+      # Configure the default logger based on current
+      # command configuration options
+      def configure_logger!
+        if config[:debug] || !ENV["DEBUG"].to_s.empty?
+          Bogo::Logger.logger.level = :debug
+        else
+          Bogo::Logger.logger.level = config.fetch(:log, :fatal)
+        end
+      end
 
       # Provides top level options with command specific options
       # merged to provide custom overrides
