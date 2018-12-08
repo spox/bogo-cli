@@ -1,3 +1,6 @@
+# v0.2.18
+* Include original error message when available
+
 # v0.2.16
 * Provide default UI instance and use for error output
 * Automatically configure logger on command setup
