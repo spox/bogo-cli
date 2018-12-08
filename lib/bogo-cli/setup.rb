@@ -53,13 +53,17 @@ module Bogo
             puts slop_result.help
             exit -1
           rescue StandardError, ScriptError => err
-            output_error err.message
+            err_msg = err.message
+            if err.respond_to?(:original) && err.original
+              err_msg << "\n#{err.original.message}"
+            end
+            output_error err_msg
             if ENV["DEBUG"]
               output_debug "Stacktrace: #{err.class}: " \
-                "#{err.message}\n#{err.backtrace.join("\n")}"
+                           "#{err.message}\n#{err.backtrace.join("\n")}"
               if err.respond_to?(:original) && err.original
                 msg = "Original Stacktrace: #{err.original.class}: " \
-                  "#{err.original.message}\n#{err.original.backtrace.join("\n")}"
+                "#{err.original.message}\n#{err.original.backtrace.join("\n")}"
                 output_debug msg
               end
             end
