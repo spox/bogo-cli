@@ -39,7 +39,7 @@ module Bogo
               err_msg << "\n#{err.original.message}"
             end
             output_error err_msg
-            if ENV["DEBUG"]
+            if ENV["DEBUG"] || ENV["DEBUG_BACKTRACE"]
               output_debug "Stacktrace: #{err.class}: " \
                            "#{err.message}\n#{err.backtrace.join("\n")}"
               if err.respond_to?(:original) && err.original
