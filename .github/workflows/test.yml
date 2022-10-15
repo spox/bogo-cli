@@ -1,0 +1,38 @@
+on:
+  push:
+    branches:
+      - main
+      - 'test-*'
+    paths:
+      - 'bin/**'
+      - 'lib/**'
+      - 'test/**'
+      - 'Gemfile'
+      - 'bogo-cli.gemspec'
+      - 'Rakefile'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'bin/**'
+      - 'lib/**'
+      - 'test/**'
+      - 'bogo-cli.gemspec'
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        ruby: [ '2.6', '2.7', '3.0', '3.1' ]
+    name: Bogo CLI test on Ruby ${{ matrix.ruby }}
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.ruby}}
+          bundler-cache: true
+      - name: Run Tests
+        run: bundle exec rake
