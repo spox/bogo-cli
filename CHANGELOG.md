@@ -1,3 +1,6 @@
+# v0.3.0
+* Remove dependency on slop library (#14)
+
 # v0.2.18
 * Include original error message when available
 
