@@ -21,7 +21,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby: [ '2.6', '2.7', '3.0', '3.1' ]
