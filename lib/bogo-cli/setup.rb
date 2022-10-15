@@ -1,7 +1,7 @@
 # Trigger shutdown on INT or TERM signals
 o_int = Signal.trap("INT") {
   o_int.call if o_int.respond_to?(:call)
-  if (Bogo::Cli.exit_on_signal == false)
+  if Bogo::Cli.exit_on_signal == false
     Thread.main.raise SignalException.new("SIGINT")
   else
     exit 0
@@ -9,49 +9,30 @@ o_int = Signal.trap("INT") {
 }
 
 o_term = Signal.trap("TERM") {
-  o_int.call if o_int.respond_to?(:call)
-  if (Bogo::Cli.exit_on_signal == false)
+  o_term.call if o_term.respond_to?(:call)
+  if Bogo::Cli.exit_on_signal == false
     Thread.main.raise SignalException.new("SIGTERM")
   else
     exit 0
   end
 }
 
-require "bogo-cli"
-
-class Slop
-  def bogo_cli_run(*args, &block)
-    slop_run(*args, &block)
-    old_runner = @runner
-    @runner = proc { |*args| old_runner.call(*args); exit 0 }
-  end
-
-  alias_method :slop_run, :run
-  alias_method :run, :bogo_cli_run
-
-  class Option
-    def default?
-      @value.nil?
-    end
-  end
-end
-
 module Bogo
   module Cli
     class Setup
       class << self
 
-        # Wrap slop setup for consistent usage
+        # Wrap parsing setup for consistent usage
         #
-        # @yield Slop setup block
+        # @yield CLI setup block
         # @return [TrueClass]
         def define(&block)
           begin
-            slop_result = Slop.parse(:help => true) do
+            result = Parser.parse(help: true) do
               instance_exec(&block)
             end
-            puts slop_result.help
-            exit -1
+            puts result.help
+            exit 255
           rescue StandardError, ScriptError => err
             err_msg = err.message
             if err.respond_to?(:original) && err.original
