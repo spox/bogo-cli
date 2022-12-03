@@ -1,3 +1,4 @@
+require 'forwardable'
 require 'optparse'
 require 'ostruct'
 
@@ -7,6 +8,72 @@ module Bogo
     class Parser
       # @return [Symbol] represent unset value
       UNSET = :__unset__
+
+      class OptionValues
+        extend Forwardable
+
+        NONFORWARDABLE = [:is_a?, :respond_to?, :object_id, :inspect, :keys, :to_s, :[]=].freeze
+
+        Smash.public_instance_methods.each do |ifunc|
+          next if ifunc.to_s.start_with?("_") || NONFORWARDABLE.include?(ifunc)
+          def_delegator :composite, ifunc
+        end
+
+        def initialize
+          @defaults = Smash.new
+          @sets = Smash.new
+        end
+
+        def []=(key, value)
+          assign(key, value)
+        end
+
+        def assign(key, value)
+          @sets[key] = value
+          self
+        end
+
+        def set_default(key, value)
+          @defaults[key] = value
+          self
+        end
+
+        def keys
+          @sets.keys | @defaults.keys
+        end
+
+        def default?(key)
+          unless keys.include?(key)
+            raise KeyError,
+                  "Unknown option key '#{key}'"
+          end
+          !@sets.keys.include?(key)
+        end
+
+        def to_s
+          "<OptionValues: #{composite.inspect}>"
+        end
+
+        def inspect
+          "<OptionValues: #{@sets.inspect} | #{@defaults.inspect}>"
+        end
+
+        def is_a?(const)
+          super || composite.is_a?(const)
+        end
+
+        def respond_to?(method)
+          super || composite.respond_to?(method)
+        end
+
+        def composite
+          Smash.new.tap do |c|
+            keys.each do |k|
+              c[k] = @sets.fetch(k, @defaults[k])
+            end
+          end
+        end
+      end
 
       # Modified option parser to include
       # subcommand information
@@ -47,7 +114,7 @@ module Bogo
           @commands = []
           @flags = []
           @callable = nil
-          @options = OpenStruct.new
+          @options = OptionValues.new
         end
 
         # Add a new flag
@@ -118,13 +185,15 @@ module Bogo
         def parse(arguments)
           raise "Must call #generate before #parse" if
             parser.nil?
-          @options = OpenStruct.new.tap do |opts|
-            flags.each do |f|
-              next if f.default.nil?
-              opts[f.option_name] = f.default
-            end
+          flags.each do |f|
+            next if f.default.nil?
+            options.set_default(f.option_name, f.default)
           end
-          parser.parse!(arguments, into: options)
+          init = OpenStruct.new
+          parser.parse!(arguments, into: init)
+          init.each_pair do |k, v|
+            options.assign(k, v)
+          end
           [options, arguments]
         end
 
