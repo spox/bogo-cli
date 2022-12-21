@@ -31,17 +31,19 @@ module Bogo
       #
       # @return [self]
       def initialize(cli_opts, args)
-        @options = Smash.new
         @defaults = Smash.new
+        @options = Smash.new
         case cli_opts
-        when OpenStruct
+        when Bogo::Cli::Parser::OptionValues
           process_cli_options(cli_opts)
+        when Bogo::Cli::Parser::Command
+          @options = cli_opts.parse(args).first
         else
-          @options = cli_opts.to_hash.to_smash(:snake)
-          [@options, *@options.values].compact.each do |hsh|
-            next unless hsh.is_a?(Hash)
-            hsh.delete_if { |k, v| v.nil? }
-          end
+          @options = cli_opts.to_h.to_smash(:snake)
+        end
+        [@options, *@options.values].compact.each do |hsh|
+          next unless hsh.is_a?(Hash)
+          hsh.delete_if { |k, v| v.nil? }
         end
         @arguments = validate_arguments!(args)
         load_config!
@@ -193,19 +195,14 @@ module Bogo
       # @param cli_opts [Slop]
       # @return [NilClass]
       def process_cli_options(cli_opts)
-        unless cli_opts.is_a?(OpenStruct)
-          raise TypeError,
-            "Expecting `OpenStruct' but received `#{cli_opts.class}'"
-        end
         @options = Smash.new
         @defaults = Smash.new
-        cli_opts.each do |cli_opt|
-          unless cli_opt.value.nil?
-            opt_key = Bogo::Utility.snake(cli_opt.key)
-            if cli_opt.default?
-              @defaults[opt_key] = cli_opt.value
+        cli_opts.each_pair do |key, value|
+          unless value.nil?
+            if cli_opts.default?(key)
+              @defaults[key] = value
             else
-              @options[opt_key] = cli_opt.value
+              @options[key] = value
             end
           end
         end
