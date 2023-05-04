@@ -1,4 +1,5 @@
 # v0.3.2
+* Format option keys for long flags with dashes (#16) 
 
 # v0.3.1
 * Add context for option parsing (#15)
