@@ -181,9 +181,8 @@ module Bogo
               ui.puts result
             end
           end
-        rescue => e
+        rescue
           ui.puts ui.color("error!", :red, :bold)
-          ui.error "Reason - #{e}"
           raise
         end
         true
