@@ -1,3 +1,4 @@
+require 'bogo'
 require 'forwardable'
 require 'optparse'
 require 'ostruct'
@@ -29,11 +30,13 @@ module Bogo
         end
 
         def assign(key, value)
+          key = key.to_s.gsub("-", "_").to_sym
           @sets[key] = value
           self
         end
 
         def set_default(key, value)
+          key = key.to_s.gsub("-", "_").to_sym
           @defaults[key] = value
           self
         end
