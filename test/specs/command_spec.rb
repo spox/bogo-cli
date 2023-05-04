@@ -81,9 +81,15 @@ describe Bogo::Cli::Command do
       before do
         @cli = Bogo::Cli::Parser.parse do
           on :n, :null_value=, 'Option', :default => 'ohai'
+          on :d, :'dashed-option=', 'Option'
           on :c, :config=, 'Option'
           on :z, :cli_defaulter=, 'Option', :default => 'CLI DEFAULT'
         end
+      end
+
+      it 'should map dashed option to underscored key' do
+        c = Bogo::Cli::Command.new(@cli, ["--dashed-option", "set-value"]).send(:config)
+        _(c[:dashed_option]).must_equal 'set-value'
       end
 
       it 'should provide the default option value' do
